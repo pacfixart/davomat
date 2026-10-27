@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="uz" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3a5a40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<title>Davomat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: matcha-style cards — sage photo block overlapping a forest-green body; vertical floor rail on the left */
+:root{
+  --bg:#f3f5ef;--surface:#ffffff;--forest:#3a5a40;--forest-2:#2f4a34;--sage:#a9bb98;--sage-soft:#e3eadb;
+  --ink:#1e2a21;--muted:#66756a;--line:#dde5d6;--on-forest:#f4f8f0;--on-forest-muted:#c9d8c3;
+  --mint:#9be0b0;--ok:#2f9a5e;--absent:#cf5d48;--late:#d39a2f;--excused:#4f86bd;
+  --shadow:0 10px 24px rgba(40,70,45,.15);--font:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101612;--surface:#18201a;--forest:#2f4a35;--forest-2:#263c2b;--sage:#5d7358;--sage-soft:#212c23;
+  --ink:#e4ece0;--muted:#98a999;--line:#29352b;--on-forest:#eef4ea;--on-forest-muted:#b3c5ad;
+  --mint:#86d39f;--ok:#4cb87a;--absent:#e07862;--late:#e0ad4b;--excused:#6c9fd3;--shadow:0 10px 24px rgba(0,0,0,.45);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101612;--surface:#18201a;--forest:#2f4a35;--forest-2:#263c2b;--sage:#5d7358;--sage-soft:#212c23;
+  --ink:#e4ece0;--muted:#98a999;--line:#29352b;--on-forest:#eef4ea;--on-forest-muted:#b3c5ad;
+  --mint:#86d39f;--ok:#4cb87a;--absent:#e07862;--late:#e0ad4b;--excused:#6c9fd3;--shadow:0 10px 24px rgba(0,0,0,.45);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 120px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.app{max-width:1100px;margin:0 auto}
+h2{font-size:17px;margin:0;font-weight:600}
+.muted{color:var(--muted)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--forest);color:var(--on-forest);border-radius:28px;padding:20px 20px 18px;box-shadow:var(--shadow)}
+.hero .c1,.hero .c2{position:absolute;border-radius:50%;pointer-events:none}
+.hero .c1{width:150px;height:150px;right:-40px;top:-50px;background:var(--sage);opacity:.55}
+.hero .c2{width:110px;height:110px;right:40px;top:-20px;background:var(--forest-2);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.hero-top{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hello{font-size:20px;font-weight:700}
+.date{color:var(--on-forest-muted);font-size:13px}
+.hero-pair{position:relative;margin-top:16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.hero-pair .lbl{background:var(--mint);color:#173420;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.06em}
+.hero-pair b{font-size:24px}
+.prog{position:relative;margin-top:10px;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--on-forest-muted)}
+.prog .bar{flex:1;height:8px;border-radius:9px;background:rgba(255,255,255,.18);overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--mint);border-radius:9px;transition:width .4s}
+
+/* avatars (real photos will come from HEMIS) */
+.ava{flex:none;display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:600;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.35),transparent 55%),var(--c,#6f8f6a);box-shadow:0 0 0 3px rgba(255,255,255,.75)}
+.ava.xs{width:32px;height:32px;font-size:12px;box-shadow:none}
+.ava.sm{width:44px;height:44px;font-size:15px}
+.ava.lg{width:72px;height:72px;font-size:24px}
+.ava.xl{width:92px;height:92px;font-size:30px}
+
+/* search */
+.search{margin-top:14px;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 14px}
+.search svg{flex:none;color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:none;font:inherit;color:var(--ink);padding:13px 0;outline:none}
+.clear{color:var(--muted);font-size:18px;padding:4px}
+
+/* pair chips */
+.pairs{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none}
+.pairs::-webkit-scrollbar{display:none}
+.pchip{flex:none;min-width:62px;padding:7px 10px;border-radius:16px;background:var(--surface);border:1px solid var(--line);text-align:center;line-height:1.2}
+.pchip b{display:block;font-size:15px}
+.pchip span{font-size:11px;color:var(--muted)}
+.pchip.on{background:var(--forest);border-color:var(--forest);color:var(--on-forest)}
+.pchip.on span{color:var(--on-forest-muted)}
+.pchip.now{position:relative}
+.pchip.now::after{content:"";position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--ok)}
+
+/* home body: rail + rooms */
+.home-body{display:grid;grid-template-columns:46px 1fr;gap:12px;margin-top:10px}
+.rail{display:flex;flex-direction:column;gap:8px;position:sticky;top:max(10px,env(safe-area-inset-top,0px));align-self:start}
+.rail button{writing-mode:vertical-rl;transform:rotate(180deg);padding:16px 0;border-radius:18px;background:var(--sage-soft);color:var(--muted);font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px}
+.rail button small{font-weight:500;font-size:11px;opacity:.85}
+.rail button.on{background:var(--forest);color:var(--on-forest)}
+.rooms-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.seg{display:flex;background:var(--sage-soft);border-radius:12px;padding:3px}
+.seg button{padding:5px 10px;border-radius:9px;font-size:12px;color:var(--muted);font-weight:500}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.empty-note{padding:30px 10px;text-align:center;color:var(--muted)}
+
+/* room card (matcha style) */
+.rc{position:relative;display:grid;grid-template-columns:96px 1fr;align-items:center;text-align:left;min-height:116px}
+.rc-photo{position:relative;z-index:2;width:96px;height:104px;border-radius:24px;background:var(--sage);display:grid;place-items:center;box-shadow:var(--shadow)}
+.rc-body{margin-left:-24px;padding:12px 14px 12px 36px;min-height:96px;background:var(--forest);color:var(--on-forest);border-radius:0 24px 24px 0;display:flex;flex-direction:column;gap:2px;min-width:0}
+.rc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rc-num{font-size:24px;font-weight:700;line-height:1.1}
+.rc-subj{font-weight:600;font-size:14px;line-height:1.25}
+.rc-meta{font-size:12px;color:var(--on-forest-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{flex:none;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.badge.done{background:var(--mint);color:#173420}
+.badge.todo{background:rgba(255,255,255,.14);color:var(--on-forest);border:1px dashed rgba(255,255,255,.45)}
+.rc .tick{position:absolute;right:-6px;bottom:-6px;width:28px;height:28px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:15px;box-shadow:0 0 0 3px var(--surface)}
+.rc.is-empty .rc-photo{background:var(--sage-soft);box-shadow:none;color:var(--muted)}
+.rc.is-empty .rc-body{background:var(--surface);color:var(--muted);border:1px dashed var(--line)}
+.rc.is-empty .rc-meta{color:var(--muted)}
+.rc:hover .rc-body{background:var(--forest-2)}
+.rc.is-empty:hover .rc-body{background:var(--surface)}
+
+/* search results */
+.res-sec{margin-top:16px}
+.res-sec h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-weight:600}
+.res-row{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;text-align:left;margin-bottom:8px}
+.res-row .t{min-width:0;flex:1}
+.res-row .t b{display:block;font-weight:600}
+.res-row .t span{font-size:12px;color:var(--muted)}
+.roomtag{flex:none;width:44px;height:44px;border-radius:14px;background:var(--forest);color:var(--on-forest);display:grid;place-items:center;font-weight:700}
+
+/* sub views */
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.back{width:42px;height:42px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:20px;display:grid;place-items:center}
+.topbar .tt{font-weight:600;font-size:17px}
+.topbar .ts{font-size:12px;color:var(--muted)}
+.big{display:grid;grid-template-columns:120px 1fr;align-items:center}
+.big .rc-photo{width:120px;height:132px;border-radius:28px}
+.big .rc-body{min-height:118px;padding:14px 16px 14px 42px;margin-left:-28px;border-radius:0 28px 28px 0;gap:4px}
+.big .rc-body .nm{font-size:19px;font-weight:700;line-height:1.2}
+.linkish{color:var(--mint);text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:13px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 16px;margin-top:14px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:500}
+.now-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.now-card .roomtag{width:56px;height:56px;font-size:18px;border-radius:18px}
+.now-card .t{flex:1;min-width:160px}
+.btn{background:var(--forest);color:var(--on-forest);border-radius:14px;padding:10px 16px;font-weight:600}
+.btn.ghost{background:var(--sage-soft);color:var(--ink)}
+.tl{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.tl-row{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:10px 12px;text-align:left;width:100%}
+.tl-row .p{font-weight:700;font-size:15px;line-height:1.1}
+.tl-row .p small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.tl-row .t{min-width:0}
+.tl-row .t b{font-weight:600;display:block}
+.tl-row .t span{font-size:12px;color:var(--muted)}
+.tl-row.off{opacity:.55;background:transparent}
+.st-chip{font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.st-chip.done{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.st-chip.todo{background:color-mix(in srgb,var(--late) 18%,transparent);color:var(--late)}
+
+/* room pairs strip */
+.strip{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:10px}
+.strip button{padding:8px 0;border-radius:12px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--surface)}
+.strip button.has{border-color:var(--late)}
+.strip button.done{background:color-mix(in srgb,var(--ok) 16%,var(--surface));border-color:var(--ok);color:var(--ok)}
+.strip button.none{opacity:.4;border-style:dashed}
+.strip button.on{outline:2px solid var(--forest);outline-offset:1px}
+.status{display:flex;align-items:center;gap:10px;font-size:13px;margin-top:12px;padding:10px 12px;border-radius:14px}
+.status.done{background:color-mix(in srgb,var(--ok) 13%,transparent)}
+.status.todo{background:color-mix(in srgb,var(--late) 14%,transparent)}
+.status .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.status.done .dot{background:var(--ok)}.status.todo .dot{background:var(--late)}
+
+/* attendance */
+.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.count{border-radius:16px;padding:8px 10px;background:var(--surface);border:1px solid var(--line)}
+.count b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.count span{font-size:11px;color:var(--muted)}
+.count.B b{color:var(--ok)}.count.Y b{color:var(--absent)}.count.K b{color:var(--late)}.count.S b{color:var(--excused)}
+.tools{display:flex;gap:8px;margin-top:12px}
+.tools .search{margin:0;flex:1}
+.legend{font-size:12px;color:var(--muted);margin:10px 2px 6px}
+.list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.st{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--line)}
+.st:first-child{border-top:0}
+.st .who{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-align:left}
+.st .who .n{font-size:11px;color:var(--muted);width:16px;text-align:right;font-variant-numeric:tabular-nums}
+.st .who .nm{min-width:0;line-height:1.2}
+.st .who .nm b{display:block;font-weight:600;font-size:13px}
+.st .who .nm span{font-size:12px;color:var(--muted)}
+.st.Y{background:color-mix(in srgb,var(--absent) 7%,transparent)}
+.st.K{background:color-mix(in srgb,var(--late) 8%,transparent)}
+.st.S{background:color-mix(in srgb,var(--excused) 7%,transparent)}
+.opts{display:flex;gap:5px;flex:none}
+.o{width:33px;height:33px;border-radius:50%;border:1.5px solid var(--line);font-weight:600;font-size:13px;color:var(--muted);background:var(--surface);transition:transform .1s}
+.o:active{transform:scale(.9)}
+.o.on{color:#fff;border-color:transparent}
+.o.on.B{background:var(--ok)}.o.on.Y{background:var(--absent)}.o.on.K{background:var(--late)}.o.on.S{background:var(--excused)}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(transparent,var(--bg) 30%)}
+.savebar button{display:block;width:100%;max-width:640px;margin:0 auto;background:var(--forest);color:var(--on-forest);border-radius:20px;padding:15px;font-weight:600;font-size:15px;box-shadow:var(--shadow)}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9;background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:14px;font-weight:500;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.foot{margin-top:26px;font-size:12px;color:var(--muted);text-align:center}
+@media (max-width:420px){.o{width:30px;height:30px;font-size:12px}.opts{gap:4px}.st .who .n{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- login: rooms light up one by one, like a building being checked ---------- */
+.linkbtn{color:var(--forest);text-decoration:underline;font-size:inherit}
+#login{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px 16px;overflow:hidden;
+  background:radial-gradient(120% 90% at 20% 0%,#4f7a56 0%,#3a5a40 45%,#2c4632 100%);color:#fff}
+#login[hidden]{display:none}
+.lg-blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.18;background:#a9bb98;animation:drift 18s ease-in-out infinite alternate}
+.lg-blob.b1{width:340px;height:340px;top:-90px;right:-110px}
+.lg-blob.b2{width:260px;height:260px;bottom:-80px;left:-90px;animation-duration:23s;background:#9be0b0}
+.lg-blob.b3{width:120px;height:120px;top:42%;left:70%;animation-duration:15s}
+@keyframes drift{to{transform:translate(-40px,30px) scale(1.12)}}
+.lg-card{position:relative;width:100%;max-width:360px;text-align:center}
+.lg-building{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:190px;margin:0 auto 22px;padding:14px;border-radius:18px;
+  background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.lg-building i{aspect-ratio:1;border-radius:6px;background:rgba(255,255,255,.14);animation:lit 4.8s ease-in-out infinite}
+@keyframes lit{0%,8%{background:rgba(255,255,255,.14);transform:scale(1)}
+  14%{background:#9be0b0;transform:scale(1.12);box-shadow:0 0 14px #9be0b0}
+  22%,80%{background:#9be0b0;transform:scale(1);box-shadow:none}92%,100%{background:rgba(255,255,255,.14)}}
+.lg-card h1{font-size:28px;margin:0;letter-spacing:.2px}
+.lg-card p.sub{margin:4px 0 22px;color:#d6e4cf;font-size:14px}
+.lg-form{display:grid;gap:10px;text-align:left}
+.lg-form label{font-size:12px;color:#d6e4cf;margin-bottom:-4px}
+.lg-form input{width:100%;height:50px;border-radius:14px;border:0;padding:0 16px;font:inherit;font-size:16px;
+  background:#f3f5ef;color:#1f2a20;outline:none}
+.lg-form input:focus{box-shadow:0 0 0 3px #9be0b0}
+.lg-pin{letter-spacing:.5em}
+.lg-btn{height:52px;border-radius:14px;margin-top:8px;background:#9be0b0;color:#1f3a25;font-weight:700;font-size:16px;
+  transition:transform .15s}
+.lg-btn:active{transform:scale(.97)}
+.lg-btn:disabled{opacity:.7}
+.lg-err{min-height:20px;color:#ffd1c9;font-size:13px;text-align:center}
+.lg-foot{margin-top:18px;font-size:12px;color:#b9cdb2}
+@media (prefers-reduced-motion:reduce){.lg-blob,.lg-building i{animation:none}}
+
+</style>
+</head>
+<body>
+<div id="login">
+  <span class="lg-blob b1"></span><span class="lg-blob b2"></span><span class="lg-blob b3"></span>
+  <div class="lg-card">
+    <div class="lg-building" id="lgBuilding" aria-hidden="true"></div>
+    <h1>Davomat</h1>
+    <p class="sub" id="lgSub">Tutorlar uchun yo'qlama</p>
+    <form class="lg-form" id="lgForm" autocomplete="on">
+      <label for="lgLogin">Login</label>
+      <input id="lgLogin" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <label for="lgPin">PIN</label>
+      <input id="lgPin" class="lg-pin" name="password" type="password" inputmode="numeric" autocomplete="current-password" required>
+      <button class="lg-btn" id="lgBtn">Kirish</button>
+      <div class="lg-err" id="lgErr" role="alert"></div>
+    </form>
+    <div class="lg-foot">Login va PIN'ni admin beradi</div>
+  </div>
+</div>
+
+<div id="appRoot" hidden>
+
+<div class="app">
+  <section id="v-home">
+    <header class="hero">
+      <div class="c1"></div><div class="c2"></div>
+      <div class="hero-top">
+        <div><div class="hello" id="hello">Xayrli kun, Bekzod</div><div class="date" id="date"></div></div>
+      </div>
+      <div class="hero-pair"><span class="lbl" id="pairLbl">Hozir</span><b id="pairName"></b><span id="pairTime"></span></div>
+      <div class="prog"><div class="bar"><i id="progBar"></i></div><span id="progTxt"></span></div>
+    </header>
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="O'qituvchi, xona, guruh yoki fan">
+      <button class="clear" id="qClear" hidden aria-label="Tozalash">×</button>
+    </div>
+    <div class="pairs" id="pairs"></div>
+    <div class="home-body" id="homeBody">
+      <nav class="rail" id="rail"></nav>
+      <div>
+        <div class="rooms-head"><h2 id="roomsTitle"></h2>
+          <div class="seg" id="seg"><button data-f="all" class="on">Hammasi</button><button data-f="todo">Kutilmoqda</button><button data-f="done">Tekshirilgan</button></div>
+        </div>
+        <div class="rooms" id="rooms"></div>
+      </div>
+    </div>
+    <div id="results" hidden></div>
+    <p class="foot"><span id="whoami"></span> · <button class="linkbtn" data-logout>Chiqish</button></p>
+  </section>
+  <section id="v-teacher" hidden></section>
+  <section id="v-room" hidden></section>
+</div>
+<div class="savebar" id="savebar" hidden><button id="saveBtn"></button></div>
+<div class="toast" id="toast" hidden></div>
+
+<script type="text/plain" id="app">
+(function(){
+const PAIRS=[["08:00","09:20"],["09:30","10:50"],["11:00","12:20"],["13:00","14:20"],["14:30","15:50"],["16:00","17:20"],["18:00","19:20"],["19:30","20:50"]];
+const ME=window.__D.me.name, TUTORS=[];
+const ST={B:"Bor",Y:"Yo'q",K:"Kech",S:"Sababli"};
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(20261026), pick=a=>a[Math.floor(R()*a.length)];
+const COLORS=["#6f8f6a","#8a7a55","#5c7f8a","#8a6464","#66708f","#7b8a55","#5f8a74","#8a6f86"];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ini=n=>n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const ava=(p,size)=>p.photo?`<span class="ava ${size}" style="--c:${p.color}"><img src="${esc(p.photo)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"></span>`:`<span class="ava ${size}" style="--c:${p.color}">${esc(ini(p.name))}</span>`;
+const toMin=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
+const fmt=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+
+/* ---------- data from the Sheet ---------- */
+const D=window.__D;
+const teachers=[], tIdx={};
+function tOf(n){n=n||"—"; if(!(n in tIdx)){const x=D.teachers[n]||{}, w=n.split(" ");
+  tIdx[n]=teachers.length; teachers.push({id:teachers.length,name:n,short:w[0]+(w[1]?" "+w[1][0]+".":""),kaf:x.kaf||"—",lav:x.lav||"—",phone:x.phone||"—",photo:x.photo||"",subj:[],color:COLORS[teachers.length%COLORS.length]})}
+  return teachers[tIdx[n]]}
+const sched={}, tBusy=PAIRS.map(()=>({})), multiB=new Set(D.lessons.map(l=>l.bino)).size>1;
+const rkey=l=>multiB&&l.bino?l.bino.replace(/-?bino/i,"")+"-"+l.room:l.room;
+D.lessons.forEach(l=>{const r=rkey(l), p=l.pair-1; if(p<0||p>7)return; sched[r]=sched[r]||PAIRS.map(()=>null);
+  const t=tOf(l.teacher); if(l.subj&&!t.subj.includes(l.subj))t.subj.push(l.subj);
+  const c=sched[r][p]; if(c){if(!c.gids.includes(l.group))c.gids.push(l.group)} else sched[r][p]={t,s:l.subj||"—",type:l.type,bino:l.bino,room:l.room,gids:[l.group]};
+  tBusy[p][t.id]=r});
+const stOf=g=>(D.students[g]||[]).map((s,i)=>({id:s[0],name:s[1],color:COLORS[i%COLORS.length]}));
+Object.values(sched).forEach(a=>a.forEach(c=>{if(!c)return; const st=[].concat(...c.gids.map(stOf)).sort((a,b)=>a.name.localeCompare(b.name));
+  c.g={id:c.gids.join(", "),students:st}}));
+const floorName=l=>(multiB&&l.bino?l.bino+" · ":"")+(l.room.replace(/\D/g,"").length<=2?"Podval":l.room.replace(/\D/g,"")[0]+"-qavat");
+const fmap={}; D.lessons.forEach(l=>{const f=floorName(l),r=rkey(l); (fmap[f]=fmap[f]||new Set()).add(r)});
+const FLOORS=Object.keys(fmap).sort().map(name=>({name,rooms:[...fmap[name]].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}));
+if(!FLOORS.length)FLOORS.push({name:"Bugun dars yo'q",rooms:[]});
+const floorOf={}; FLOORS.forEach((f,i)=>f.rooms.forEach(r=>floorOf[r]=i));
+
+/* ---------- current pair ---------- */
+const now=new Date(), nowM=now.getHours()*60+now.getMinutes();
+let CUR=-1, curLbl="Hozir";
+for(let i=0;i<PAIRS.length;i++){if(nowM<toMin(PAIRS[i][0])){CUR=i;curLbl="Keyingi";break} if(nowM<=toMin(PAIRS[i][1])){CUR=i;break}}
+if(CUR<0){CUR=7;curLbl="O'tgan"}
+
+/* ---------- attendance records ---------- */
+const KEY="davomat-demo-v1";
+const recs={};
+function fillRec(r,p,rec){const c=sched[r]&&sched[r][p]; if(!c)return rec; const m={}; c.g.students.forEach(s=>m[s.id]=rec.marks[s.id]||"B"); rec.marks=m; return rec}
+function loadRecs(list){Object.keys(recs).forEach(k=>delete recs[k]); list.forEach(x=>{const r=rkey(x),p=x.pair-1; recs[p+"|"+r]=fillRec(r,p,x)})}
+loadRecs(D.recs);
+setInterval(()=>{if(document.hidden)return; api("recs").then(o=>{loadRecs(o); if(S.cur&&S.cur.view==="home")renderHome()}).catch(()=>{})},60000);
+const mine={}; try{Object.assign(mine,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(e){}}
+const counts=rec=>{const c={B:0,Y:0,K:0,S:0};Object.values(rec.marks).forEach(v=>c[v]++);return c};
+
+/* ---------- state ---------- */
+const S={pair:CUR,floor:0,filter:"all",q:"",stack:[]};
+const $=id=>document.getElementById(id);
+const DAYS=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+$("date").textContent=DAYS[now.getDay()]+", "+now.getDate()+"-"+MON[now.getMonth()]+" · Tutor: "+ME;
+$("hello").textContent=(now.getHours()<12?"Xayrli tong":now.getHours()<18?"Xayrli kun":"Xayrli kech")+", "+(ME||"").split(" ").slice(-1)[0];
+
+function show(v){["v-home","v-teacher","v-room"].forEach(id=>$(id).hidden=id!==v);$("savebar").hidden=v!=="v-room";window.scrollTo(0,0)}
+function go(view,arg){S.stack.push(S.cur||{view:"home"});open(view,arg)}
+function open(view,arg){S.cur={view,arg}; if(view==="home"){show("v-home");renderHome()} else if(view==="teacher")renderTeacher(arg); else renderRoom(arg.room,arg.pair)}
+function goBack(){const prev=S.stack.pop()||{view:"home"};open(prev.view,prev.arg)}
+
+/* ---------- home ---------- */
+function renderHome(){
+  const p=S.pair;
+  $("pairLbl").textContent=p===CUR?curLbl:(p<CUR?"O'tgan":"Keyingi");
+  $("pairName").textContent=(p+1)+"-para"; $("pairTime").textContent=PAIRS[p][0]+"–"+PAIRS[p][1];
+  let tot=0,done=0; Object.keys(sched).forEach(r=>{if(sched[r][p]){tot++; if(recs[p+"|"+r])done++}});
+  $("progBar").style.width=(tot?done/tot*100:0)+"%"; $("progTxt").textContent=done+" / "+tot+" xona tekshirildi";
+  $("pairs").innerHTML=PAIRS.map((x,i)=>`<button class="pchip${i===S.pair?" on":""}${i===CUR?" now":""}" data-p="${i}"><b>${i+1}</b><span>${x[0]}</span></button>`).join("");
+  $("rail").innerHTML=FLOORS.map((f,i)=>{const rs=f.rooms.filter(r=>sched[r][p]);const d=rs.filter(r=>recs[p+"|"+r]).length;
+    return `<button class="${i===S.floor?"on":""}" data-f="${i}">${f.name} <small>${d}/${rs.length}</small></button>`}).join("");
+  $("roomsTitle").textContent=FLOORS[S.floor].name+" · "+(p+1)+"-para";
+  [...$("seg").children].forEach(b=>b.classList.toggle("on",b.dataset.f===S.filter));
+  const list=FLOORS[S.floor].rooms.filter(r=>{const c=sched[r][p],d=!!recs[p+"|"+r];
+    return S.filter==="all"||(S.filter==="todo"&&c&&!d)||(S.filter==="done"&&d)});
+  $("rooms").innerHTML=list.length?list.map(r=>roomCard(r,p)).join(""):`<div class="empty-note">Bu filtrda xona yo'q</div>`;
+  const q=S.q.trim(); $("homeBody").hidden=!!q; $("results").hidden=!q; $("qClear").hidden=!q; if(q)renderResults(q);
+}
+function roomCard(r,p){
+  const c=sched[r][p], rec=recs[p+"|"+r];
+  if(!c)return `<button class="rc is-empty" data-room="${r}"><div class="rc-photo"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="15" cy="12" r="1"/></svg></div>
+    <div class="rc-body"><span class="rc-num">${r}</span><span class="rc-meta">Bu parada dars yo'q</span></div></button>`;
+  const badge=rec?`<span class="badge done">✓ ${rec.time}</span>`:`<span class="badge todo">Kutilmoqda</span>`;
+  return `<button class="rc" data-room="${r}"><div class="rc-photo">${ava(c.t,"lg")}${rec?'<span class="tick">✓</span>':""}</div>
+    <div class="rc-body"><div class="rc-top"><span class="rc-num">${r}</span>${badge}</div>
+    <span class="rc-subj">${esc(c.s)}</span><span class="rc-meta">${esc(c.g.id)} · ${esc(c.t.short)}</span>
+    ${rec?`<span class="rc-meta">${esc(rec.by)} · ${counts(rec).B}/${c.g.students.length} bor</span>`:""}</div></button>`;
+}
+function renderResults(q){
+  const ql=q.toLowerCase(), p=S.pair;
+  const ts=teachers.filter(t=>t.name.toLowerCase().includes(ql)).slice(0,12);
+  const rs=Object.keys(sched).filter(r=>{const c=sched[r][p];return r.includes(ql)||(c&&(c.g.id.toLowerCase().includes(ql)||c.s.toLowerCase().includes(ql)))}).slice(0,12);
+  let h="";
+  if(ts.length)h+=`<div class="res-sec"><h3>O'qituvchilar</h3>${ts.map(t=>{const r=tBusy[p][t.id];
+    return `<button class="res-row" data-teacher="${t.id}">${ava(t,"sm")}<span class="t"><b>${esc(t.name)}</b><span>${r?`Hozir ${r}-xonada · ${esc(sched[r][p].s)}`:"Bu parada darsi yo'q"}</span></span></button>`}).join("")}</div>`;
+  if(rs.length)h+=`<div class="res-sec"><h3>Xonalar · ${p+1}-para</h3>${rs.map(r=>{const c=sched[r][p];
+    return `<button class="res-row" data-room="${r}"><span class="roomtag">${r}</span><span class="t"><b>${c?esc(c.s):"Dars yo'q"}</b><span>${c?esc(c.g.id)+" · "+esc(c.t.short):FLOORS[floorOf[r]].name}</span></span></button>`}).join("")}</div>`;
+  $("results").innerHTML=h||`<div class="empty-note">“${esc(q)}” bo'yicha hech narsa topilmadi</div>`;
+}
+
+/* ---------- teacher ---------- */
+function renderTeacher(id){
+  const t=teachers[id], p=S.pair, r=tBusy[p][t.id];
+  const rows=PAIRS.map((x,i)=>{const rr=tBusy[i][t.id];
+    if(!rr)return `<div class="tl-row off"><span class="p">${i+1}<small>${x[0]}</small></span><span class="t"><span>Dars yo'q</span></span><span></span></div>`;
+    const c=sched[rr][i],rec=recs[i+"|"+rr];
+    return `<button class="tl-row" data-room="${rr}" data-p="${i}"><span class="p">${i+1}<small>${x[0]}</small></span><span class="t"><b>${rr}-xona · ${esc(c.s)}</b><span>${esc(c.g.id)} · ${c.g.students.length} talaba</span></span>
+      ${rec?`<span class="st-chip done">✓ ${rec.time}</span>`:`<span class="st-chip todo">Kutilmoqda</span>`}</button>`}).join("");
+  $("v-teacher").innerHTML=`<div class="topbar"><button class="back" data-back aria-label="Orqaga">←</button><div><div class="tt">O'qituvchi</div><div class="ts">${t.kaf} kafedrasi</div></div></div>
+    <div class="big"><div class="rc-photo">${ava(t,"xl")}</div><div class="rc-body"><span class="nm">${esc(t.name)}</span><span class="rc-meta">${t.lav}</span><span class="rc-meta">${t.phone}</span></div></div>
+    <div class="card now-card">${r?`<span class="roomtag">${r}</span><span class="t"><b>${p+1}-para · ${PAIRS[p][0]}–${PAIRS[p][1]}</b><br><span class="muted">${esc(sched[r][p].s)} · ${esc(sched[r][p].g.id)}</span></span><button class="btn" data-room="${r}" data-p="${p}">Xonaga o'tish</button>`
+      :`<span class="t"><b>${p+1}-para</b><br><span class="muted">Bu parada darsi yo'q</span></span>`}</div>
+    <div class="card"><dl class="kv"><dt>Kafedra</dt><dd>${t.kaf}</dd><dt>Lavozim</dt><dd>${t.lav}</dd><dt>Fanlar</dt><dd>${[...new Set(t.subj)].map(esc).join(", ")}</dd><dt>Telefon</dt><dd>${t.phone}</dd></dl></div>
+    <h2 style="margin-top:20px">Bugungi darslar</h2><div class="tl">${rows}</div>`;
+  show("v-teacher");
+}
+
+/* ---------- room ---------- */
+let draft=null, room=null, rpair=0, sq="";
+function renderRoom(r,p){
+  room=r; rpair=p; sq="";
+  const c=sched[r][p], rec=recs[p+"|"+r];
+  draft=c?{}:null; if(c)c.g.students.forEach(s=>draft[s.id]=rec?rec.marks[s.id]||"B":"B");
+  const strip=PAIRS.map((x,i)=>{const cc=sched[r][i],d=recs[i+"|"+r];return `<button class="${!cc?"none":d?"done":"has"}${i===p?" on":""}" data-rp="${i}" title="${x[0]}–${x[1]}">${i+1}</button>`}).join("");
+  let h=`<div class="topbar"><button class="back" data-back aria-label="Orqaga">←</button><div><div class="tt">${r}-xona</div><div class="ts">${FLOORS[floorOf[r]].name} · ${p+1}-para · ${PAIRS[p][0]}–${PAIRS[p][1]}</div></div></div>`;
+  if(c){h+=`<div class="big"><div class="rc-photo">${ava(c.t,"xl")}</div><div class="rc-body"><span class="nm">${esc(c.s)}</span>
+      <span class="rc-meta">Guruh: <b>${esc(c.g.id)}</b> · ${c.g.students.length} talaba</span>
+      <button class="linkish" data-teacher="${c.t.id}">${esc(c.t.name)} · ${c.t.lav}</button></div></div>`}
+  else h+=`<div class="card"><b>Bu parada ${r}-xonada dars yo'q</b><br><span class="muted">Pastdan boshqa parani tanlang.</span></div>`;
+  h+=`<div class="strip">${strip}</div>`;
+  if(c){
+    h+=rec?`<div class="status done"><span class="dot"></span><span><b>Yo'qlama qilingan: ${rec.time}</b> · ${esc(rec.by)}${rec.edited?" · tahrirlangan "+rec.edited:""}<br><span class="muted">O'zgartirsangiz, tahrir logga yoziladi.</span></span></div>`
+      :`<div class="status todo"><span class="dot"></span><span><b>Hali yo'qlama qilinmagan</b><br><span class="muted">Hamma “bor” turibdi, faqat kelmaganlarni belgilang.</span></span></div>`;
+    h+=`<div class="counts" id="counts"></div>
+      <div class="tools"><div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="sq" type="search" autocomplete="off" placeholder="Ism yoki familiya"></div>
+      <button class="btn ghost" id="allB">Hammasi bor</button></div>
+      <div class="legend">B — bor · Y — yo'q · K — kechikdi · S — sababli. Ismga bosish: bor ↔ yo'q.</div>
+      <div class="list" id="list"></div>`;
+  }
+  $("v-room").innerHTML=h; show("v-room"); $("savebar").hidden=!c;
+  if(c){renderList();$("sq").addEventListener("input",e=>{sq=e.target.value.toLowerCase();renderList()});$("allB").onclick=()=>{Object.keys(draft).forEach(k=>draft[k]="B");renderList()}}
+}
+function renderList(){
+  const c=sched[room][rpair];
+  $("list").innerHTML=c.g.students.map((s,i)=>!s.name.toLowerCase().includes(sq)?"":`<div class="st ${draft[s.id]}" data-sid="${s.id}">
+    <button class="who" data-toggle><span class="n">${i+1}</span>${ava(s,"xs")}<span class="nm"><b>${esc(s.name.split(" ")[0])}</b><span>${esc(s.name.split(" ").slice(1).join(" "))}</span></span></button>
+    <div class="opts">${"BYKS".split("").map(k=>`<button class="o ${k}${draft[s.id]===k?" on":""}" data-set="${k}" aria-label="${ST[k]}">${k}</button>`).join("")}</div></div>`).join("")||`<div class="empty-note">Topilmadi</div>`;
+  updCounts();
+}
+function updCounts(){const n={B:0,Y:0,K:0,S:0};Object.values(draft).forEach(v=>n[v]++);
+  $("counts").innerHTML="BYKS".split("").map(k=>`<div class="count ${k}"><b>${n[k]}</b><span>${ST[k]}</span></div>`).join("");
+  $("saveBtn").textContent=`Saqlash · ${n.B} bor, ${n.Y} yo'q${n.K?", "+n.K+" kech":""}${n.S?", "+n.S+" sababli":""}`}
+function setMark(row,k){draft[row.dataset.sid]=k;row.className="st "+k;row.querySelectorAll(".o").forEach(b=>b.classList.toggle("on",b.dataset.set===k));updCounts()}
+$("saveBtn").onclick=()=>{
+  const b=$("saveBtn"), c=sched[room][rpair], r=room, p=rpair; b.disabled=true; b.textContent="Saqlanmoqda…";
+  api("save",{p:{date:D.date,pair:p+1,bino:c.bino,room:c.room,group:c.g.id,subj:c.s,teacher:c.t.name,
+      marks:c.g.students.map(s=>[s.id,s.name,draft[s.id]||"B"])}})
+    .then(rec=>{recs[p+"|"+r]=fillRec(r,p,rec);
+      toast(`${r}-xona saqlandi · ${counts(recs[p+"|"+r]).Y} yo'q`); S.stack=[]; S.pair=p; S.floor=floorOf[r]; open("home")})
+    .catch(e=>toast("Xato: "+e.message))
+    .finally(()=>{b.disabled=false; b.textContent="Saqlash"});
+};
+let tt; function toast(m){const e=$("toast");e.textContent=m;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,2400)}
+
+/* ---------- events ---------- */
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  if(b.dataset.back!==undefined)return goBack();
+  if(b.dataset.set){const row=b.closest(".st");return setMark(row,b.dataset.set)}
+  if(b.dataset.toggle!==undefined){const row=b.closest(".st");return setMark(row,draft[row.dataset.sid]==="B"?"Y":"B")}
+  if(b.dataset.rp!==undefined){return renderRoom(room,+b.dataset.rp)}
+  if(b.dataset.teacher!==undefined)return go("teacher",+b.dataset.teacher);
+  if(b.dataset.room)return go("room",{room:b.dataset.room,pair:b.dataset.p!==undefined?+b.dataset.p:S.pair});
+  if(b.closest("#pairs")){S.pair=+b.dataset.p;return renderHome()}
+  if(b.closest("#rail")){S.floor=+b.dataset.f;return renderHome()}
+  if(b.closest("#seg")){S.filter=b.dataset.f;return renderHome()}
+  if(b.id==="qClear"){$("q").value="";S.q="";return renderHome()}
+});
+$("q").addEventListener("input",e=>{S.q=e.target.value;renderHome()});
+S.cur={view:"home"}; renderHome();
+})();
+</script>
+
+</div>
+<script>
+const API_URL = window.DAVOMAT_API || "https://script.google.com/macros/s/AKfycbyE6sQCLjLVoBzGqWWx2rTPAPBqMsnGwRIUeqQLZ2uq5ak5XKD8t8V2uqscyrTPFQP-/exec";
+const TK = "davomat-token";
+let TOKEN = null;
+try { TOKEN = localStorage.getItem(TK); } catch (e) {}
+
+async function api(fn, body) {
+  const r = await fetch(API_URL, {method: "POST", body: JSON.stringify(Object.assign({fn, token: TOKEN}, body || {}))});
+  const j = await r.json();
+  if (j.error) { if (j.error === "AUTH") logout(); throw new Error(j.error); }
+  return j.data;
+}
+function logout() {
+  try { localStorage.removeItem(TK); } catch (e) {}
+  location.reload();
+}
+
+// 20 "rooms" light up in a wave
+const lb = document.getElementById("lgBuilding");
+for (let i = 0; i < 20; i++) { const x = document.createElement("i"); x.style.animationDelay = ((i % 5) * .18 + Math.floor(i / 5) * .32) + "s"; lb.appendChild(x); }
+
+const $l = id => document.getElementById(id);
+async function start() {
+  $l("lgSub").textContent = "Bugungi jadval yuklanmoqda…";
+  $l("lgForm").hidden = true;
+  try {
+    window.__D = await api("day");
+  } catch (e) {
+    $l("lgForm").hidden = false; $l("lgSub").textContent = "Tutorlar uchun yo'qlama";
+    $l("lgErr").textContent = e.message === "AUTH" ? "" : "Yuklab bo'lmadi: " + e.message;
+    return;
+  }
+  $l("login").hidden = true;
+  $l("appRoot").hidden = false;
+  new Function($l("app").textContent)();
+  const me = window.__D.me;
+  $l("whoami").textContent = me.name + " · " + (me.role === "tutor" ? me.binos : (me.role === "dekan" ? "Dekan" : "Admin") + " · hamma binolar");
+}
+$l("lgForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  $l("lgErr").textContent = ""; $l("lgBtn").disabled = true; $l("lgBtn").textContent = "Tekshirilmoqda…";
+  try {
+    const r = await api("login", {login: $l("lgLogin").value.trim(), pin: $l("lgPin").value.trim()});
+    TOKEN = r.token;
+    try { localStorage.setItem(TK, TOKEN); } catch (e) {}
+    await start();
+  } catch (err) { $l("lgErr").textContent = err.message; }
+  $l("lgBtn").disabled = false; $l("lgBtn").textContent = "Kirish";
+});
+document.addEventListener("click", e => { if (e.target.closest("[data-logout]")) logout(); });
+if (TOKEN) start();
+
+</script>
+</body>
+</html>
