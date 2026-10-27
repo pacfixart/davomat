@@ -310,9 +310,11 @@ D.lessons.forEach(l=>{const r=rkey(l), p=l.pair-1; if(p<0||p>7)return; sched[r]=
 const stOf=g=>(D.students[g]||[]).map((s,i)=>({id:s[0],name:s[1],color:COLORS[i%COLORS.length]}));
 Object.values(sched).forEach(a=>a.forEach(c=>{if(!c)return; const st=[].concat(...c.gids.map(stOf)).sort((a,b)=>a.name.localeCompare(b.name));
   c.g={id:c.gids.join(", "),students:st}}));
-const floorName=l=>(multiB&&l.bino?l.bino+" · ":"")+(l.room.replace(/\D/g,"").length<=2?"Podval":l.room.replace(/\D/g,"")[0]+"-qavat");
+const floorName=l=>(multiB?(l.bino||"Boshqa")+" · ":"")+(l.room.replace(/\D/g,"").length<=2?"Podval":l.room.replace(/\D/g,"")[0]+"-qavat");
 const fmap={}; D.lessons.forEach(l=>{const f=floorName(l),r=rkey(l); (fmap[f]=fmap[f]||new Set()).add(r)});
-const FLOORS=Object.keys(fmap).sort().map(name=>({name,rooms:[...fmap[name]].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}));
+// binolar tartib bilan (I, II, III), "Boshqa" oxirida; podval har bino ichida birinchi
+const fOrd=n=>(n.startsWith("Boshqa")?"9":"0")+n.replace(/^(I+)-bino/i,(m,g)=>g.length).replace("Podval","0");
+const FLOORS=Object.keys(fmap).sort((a,b)=>fOrd(a).localeCompare(fOrd(b),undefined,{numeric:true})).map(name=>({name,rooms:[...fmap[name]].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}));
 if(!FLOORS.length)FLOORS.push({name:"Bugun dars yo'q",rooms:[]});
 const floorOf={}; FLOORS.forEach((f,i)=>f.rooms.forEach(r=>floorOf[r]=i));
 
@@ -334,7 +336,7 @@ function persist(){try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(e){}
 const counts=rec=>{const c={B:0,Y:0,K:0,S:0};Object.values(rec.marks).forEach(v=>c[v]++);return c};
 
 /* ---------- state ---------- */
-const S={pair:CUR,floor:0,filter:"all",q:"",stack:[]};
+const S={pair:CUR,floor:(()=>{let b=0,m=-1;FLOORS.forEach((f,i)=>{const n=f.rooms.filter(r=>sched[r][CUR]).length;if(n>m){m=n;b=i}});return b})(),filter:"all",q:"",stack:[]};
 const $=id=>document.getElementById(id);
 const DAYS=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
 $("date").textContent=DAYS[now.getDay()]+", "+now.getDate()+"-"+MON[now.getMonth()]+" · Tutor: "+ME;
