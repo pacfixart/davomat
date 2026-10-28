@@ -223,6 +223,8 @@ h2{font-size:17px;margin:0;font-weight:600}
 .lg-err{min-height:20px;color:#ffd1c9;font-size:13px;text-align:center}
 .lg-foot{margin-top:18px;font-size:12px;color:#b9cdb2}
 @media (prefers-reduced-motion:reduce){.lg-blob,.lg-building i{animation:none}}
+/* role without "yo'qlama qiladi" — view only */
+.readonly #savebar,.readonly .st .o,.readonly #allB{display:none!important}
 
 </style>
 </head>
@@ -506,7 +508,8 @@ async function start() {
   $l("appRoot").hidden = false;
   new Function($l("app").textContent)();
   const me = window.__D.me;
-  $l("whoami").textContent = me.name + " · " + (me.role === "tutor" ? me.binos : (me.role === "dekan" ? "Dekan" : "Admin") + " · hamma binolar");
+  $l("whoami").textContent = me.name + " · " + me.role + " · " + me.binos + (me.mark ? "" : " · faqat ko'rish");
+  if (!me.mark) document.body.classList.add("readonly");
 }
 $l("lgForm").addEventListener("submit", async e => {
   e.preventDefault();
