@@ -225,6 +225,60 @@ h2{font-size:17px;margin:0;font-weight:600}
 @media (prefers-reduced-motion:reduce){.lg-blob,.lg-building i{animation:none}}
 /* role without "yo'qlama qiladi" — view only */
 .readonly #savebar,.readonly .st .o,.readonly #allB{display:none!important}
+/* ---------- Kelmaganlar / Hisobot / bottom nav ---------- */
+body{padding-bottom:76px}
+.x-nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;gap:4px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+  background:var(--surface);box-shadow:0 -6px 20px rgba(40,70,45,.10)}
+.x-nav button{flex:1;max-width:160px;display:grid;justify-items:center;gap:2px;padding:6px 0;border-radius:14px;font-size:12px;color:var(--muted)}
+.x-nav button b{font-size:18px;line-height:1}
+.x-nav button.on{background:var(--sage-soft);color:var(--forest);font-weight:600}
+.x-nav.hide{display:none}
+#v-abs,#v-rep{padding:16px 0 8px}
+.x-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 12px}
+.x-head h2{font-size:20px;margin:0}
+.x-sub{color:var(--muted);font-size:12px;font-weight:400}
+.x-search input,.x-row input,.x-row select,#csMin,#csNote{width:100%;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);
+  padding:0 14px;font:inherit;color:var(--ink)}
+#csNote{height:auto;padding:10px 14px;resize:vertical}
+.x-row{display:flex;gap:8px;align-items:center;margin:8px 0}
+.x-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.x-chips button{padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px}
+.x-chips button.on{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
+.x-btn{height:44px;padding:0 18px;border-radius:12px;background:var(--forest);color:var(--on-forest);font-weight:600}
+.x-btn.ghost{background:var(--sage-soft);color:var(--forest)}
+.x-list{display:grid;gap:10px;margin-top:10px}
+.x-item{background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:0 2px 8px rgba(40,70,45,.06)}
+.x-item .t{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.x-item .m{color:var(--muted);font-size:12px;margin-top:2px}
+.x-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.x-tag{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--sage-soft);color:var(--forest)}
+.x-tag.Y{background:#f6d5cf;color:#8c3426}.x-tag.K{background:#f8ecc4;color:#7a5a12}.x-tag.S{background:#d8e6f4;color:#2c5680}
+.x-tag.ok{background:#d7efd9;color:#1f6b3d}.x-tag.no{background:#eee;color:#666}
+.x-calls{display:flex;gap:8px;margin-top:10px}
+.x-calls a,.x-calls span{flex:1;text-align:center;padding:10px 0;border-radius:12px;font-size:13px;font-weight:600;text-decoration:none}
+.x-calls a{background:var(--forest);color:var(--on-forest)}
+.x-calls a.ota{background:var(--sage-soft);color:var(--forest)}
+.x-calls span{background:#f1f1ee;color:var(--muted);font-weight:400}
+.x-empty{padding:30px 10px;text-align:center;color:var(--muted)}
+.x-kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:12px 0}
+.x-kpi div{background:var(--surface);border-radius:16px;padding:12px 14px}
+.x-kpi div.big{grid-column:1/-1;background:var(--forest);color:var(--on-forest)}
+.x-kpi small{display:block;font-size:12px;opacity:.75}
+.x-kpi b{font-size:24px}
+.x-kpi div.big b{font-size:34px}
+.x-sec{display:flex;justify-content:space-between;align-items:center;margin:18px 0 6px}
+.x-sec h3{margin:0;font-size:16px}
+.x-g{display:grid;grid-template-columns:1fr 90px 44px;gap:8px;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.x-bar{height:8px;border-radius:99px;background:var(--sage-soft);overflow:hidden}
+.x-bar i{display:block;height:100%;background:var(--ok)}
+.x-bar i.lo{background:var(--absent)}.x-bar i.mid{background:var(--late)}
+.x-more{display:block;margin:8px auto 0;color:var(--forest);font-size:13px;text-decoration:underline}
+.x-sheet{position:fixed;inset:0;z-index:60;background:rgba(20,30,22,.45);display:flex;align-items:flex-end;justify-content:center}
+.x-sheet[hidden]{display:none}
+.x-sheet .x-card{width:100%;max-width:520px;background:var(--bg);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.x-sheet h3{margin:0 0 6px}
+.x-lbl{font-size:12px;color:var(--muted);margin-top:10px}
+.x-row[hidden],#v-abs[hidden],#v-rep[hidden]{display:none}
 
 </style>
 </head>
@@ -279,6 +333,23 @@ h2{font-size:17px;margin:0;font-weight:600}
   </section>
   <section id="v-teacher" hidden></section>
   <section id="v-room" hidden></section>
+<section id="v-abs" hidden>
+  <div class="x-head"><h2>Bugun kelmaganlar</h2><span class="x-sub" id="absSub"></span></div>
+  <label class="x-search"><input id="absQ" placeholder="Ism yoki guruh bo'yicha qidirish"></label>
+  <div id="absList" class="x-list"></div>
+</section>
+
+<section id="v-rep" hidden>
+  <div class="x-head"><h2>Hisobot</h2><button class="x-btn ghost" id="repCsv">📥 Excel</button></div>
+  <div class="x-chips" id="repPer">
+    <button data-per="day" class="on">Bugun</button><button data-per="week">Shu hafta</button><button data-per="month">Shu oy</button><button data-per="custom">Tanlash</button>
+  </div>
+  <div class="x-row" id="repDates" hidden><input type="date" id="repFrom"><span>—</span><input type="date" id="repTo"></div>
+  <div class="x-row"><select id="repBino"></select><input id="repGrp" placeholder="Guruh (masalan BTK 24)"></div>
+  <div id="repBody"><div class="x-empty">Yuklanmoqda…</div></div>
+</section>
+
+
 </div>
 <div class="savebar" id="savebar" hidden><button id="saveBtn"></button></div>
 <div class="toast" id="toast" hidden></div>
@@ -338,6 +409,7 @@ function persist(){try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(e){}
 const counts=rec=>{const c={B:0,Y:0,K:0,S:0};Object.values(rec.marks).forEach(v=>c[v]++);return c};
 
 /* ---------- state ---------- */
+window.__goHome=()=>{S.stack=[];open("home")};
 const S={pair:CUR,floor:(()=>{let b=0,m=-1;FLOORS.forEach((f,i)=>{const n=f.rooms.filter(r=>sched[r][CUR]).length;if(n>m){m=n;b=i}});return b})(),filter:"all",q:"",stack:[]};
 const $=id=>document.getElementById(id);
 const DAYS=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
@@ -471,6 +543,27 @@ S.cur={view:"home"}; renderHome();
 })();
 </script>
 
+<nav class="x-nav" id="xNav">
+  <button data-tab="home" class="on"><b>▦</b>Xonalar</button>
+  <button data-tab="abs"><b>☎</b>Kelmaganlar</button>
+  <button data-tab="rep"><b>▤</b>Hisobot</button>
+</nav>
+
+<div class="x-sheet" id="callSheet" hidden>
+  <div class="x-card">
+    <h3 id="csName"></h3>
+    <div class="x-lbl">Kim bilan gaplashildi</div>
+    <div class="x-chips" id="csWho"><button data-v="Talaba">Talaba</button><button data-v="Ota-ona">Ota-ona</button></div>
+    <div class="x-lbl">Natija</div>
+    <div class="x-chips" id="csRes"><button data-v="Gaplashildi">Gaplashildi</button><button data-v="Javob bermadi">Javob bermadi</button><button data-v="Raqam xato">Raqam xato</button></div>
+    <div class="x-lbl">Davomiyligi, daqiqa <span class="x-sub">(taxminiy, o'zgartirsa bo'ladi)</span></div>
+    <input id="csMin" type="number" min="0" step="0.5" inputmode="decimal">
+    <div class="x-lbl">Izoh</div>
+    <textarea id="csNote" rows="2" placeholder="Masalan: kasal, ertaga keladi"></textarea>
+    <div class="x-row"><button class="x-btn ghost" id="csCancel">Bekor</button><button class="x-btn" id="csSave">Saqlash</button></div>
+  </div>
+</div>
+
 </div>
 <script>
 const API_URL = window.DAVOMAT_API || "https://script.google.com/macros/s/AKfycbyE6sQCLjLVoBzGqWWx2rTPAPBqMsnGwRIUeqQLZ2uq5ak5XKD8t8V2uqscyrTPFQP-/exec";
@@ -510,6 +603,7 @@ async function start() {
   const me = window.__D.me;
   $l("whoami").textContent = me.name + " · " + me.role + " · " + me.binos + (me.mark ? "" : " · faqat ko'rish");
   if (!me.mark) document.body.classList.add("readonly");
+  window.__extraInit();
 }
 $l("lgForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -524,6 +618,154 @@ $l("lgForm").addEventListener("submit", async e => {
 });
 document.addEventListener("click", e => { if (e.target.closest("[data-logout]")) logout(); });
 if (TOKEN) start();
+/* ---------- Kelmaganlar (qo'ng'iroq) va Hisobot ---------- */
+window.__extraInit = function () {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const D = window.__D, canMark = D.me.mark;
+  const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const TODAY = D.date;
+  const tel = p => { p = String(p || "").replace(/[^\d+]/g, ""); if (/^\d{9}$/.test(p)) p = "+998" + p; else if (/^998\d{9}$/.test(p)) p = "+" + p; return p; };
+  const ST = {Y: "Yo'q", K: "Kech", S: "Sababli"};
+
+  /* --- tabs --- */
+  const views = ["v-home", "v-teacher", "v-room", "v-abs", "v-rep"];
+  function tab(t) {
+    document.querySelectorAll("#xNav button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
+    if (t === "home") { views.forEach(v => $(v).hidden = true); window.__goHome(); return; }
+    views.forEach(v => $(v).hidden = v !== "v-" + t);
+    $("savebar").hidden = true; window.scrollTo(0, 0);
+    if (t === "abs") loadAbs(); else loadRep();
+  }
+  $("xNav").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) tab(b.dataset.tab); });
+  // xona ichida "Saqlash" paneli chiqqanda pastki menyu yashirinadi
+  new MutationObserver(() => $("xNav").classList.toggle("hide", !$("savebar").hidden)).observe($("savebar"), {attributes: true});
+
+  /* --- Kelmaganlar --- */
+  let abs = [];
+  async function loadAbs() {
+    $("absList").innerHTML = '<div class="x-empty">Yuklanmoqda…</div>';
+    try { abs = (await api("report", {q: {from: TODAY, to: TODAY}})).students; }
+    catch (e) { $("absList").innerHTML = `<div class="x-empty">Xato: ${esc(e.message)}</div>`; return; }
+    drawAbs();
+  }
+  function callTags(cs) {
+    return cs.map(c => `<span class="x-tag ${c.result === "Gaplashildi" ? "ok" : "no"}">${c.result === "Gaplashildi" ? "✓" : "✗"} ${esc(c.who)} · ${esc(c.result)}${c.min ? " · " + c.min + " daq" : ""} · ${esc(c.time)}</span>`).join("");
+  }
+  function drawAbs() {
+    const q = $("absQ").value.trim().toLowerCase();
+    const list = abs.filter(s => !q || (s.name + " " + s.group).toLowerCase().includes(q));
+    const called = abs.filter(s => s.calls.some(c => c.result === "Gaplashildi")).length;
+    $("absSub").textContent = abs.length ? `${abs.length} ta talaba · ${called} tasi bilan gaplashildi` : "";
+    $("absList").innerHTML = list.length ? list.map(s => `<div class="x-item">
+      <div class="t"><span>${esc(s.name)}</span><span class="x-sub">${esc(s.group)}</span></div>
+      <div class="x-tags">${["Y", "K", "S"].filter(k => s[k]).map(k => `<span class="x-tag ${k}">${ST[k]}${s[k] > 1 ? " ×" + s[k] : ""}</span>`).join("")}${callTags(s.calls)}</div>
+      ${canMark ? `<div class="x-calls">${s.tel ? `<a href="tel:${esc(tel(s.tel))}" data-call="${esc(s.id)}" data-who="Talaba">📞 Talaba</a>` : `<span>Talaba raqami yo'q</span>`}${s.ota ? `<a class="ota" href="tel:${esc(tel(s.ota))}" data-call="${esc(s.id)}" data-who="Ota-ona">📞 Ota-ona</a>` : `<span>Ota-ona raqami yo'q</span>`}</div>` : ""}
+    </div>`).join("") : `<div class="x-empty">${abs.length ? "Topilmadi" : "Bugun hozircha kelmaganlar yo'q 👍"}</div>`;
+  }
+  $("absQ").addEventListener("input", drawAbs);
+
+  /* --- qo'ng'iroq: tugma bosilgandan ilovaga qaytguncha vaqt = taxminiy davomiylik --- */
+  let pending = null;
+  document.addEventListener("click", e => {
+    const a = e.target.closest("[data-call]"); if (!a) return;
+    const s = abs.find(x => x.id === a.dataset.call);
+    pending = {s, who: a.dataset.who, phone: a.getAttribute("href").slice(4), t0: Date.now(), away: false};
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!pending) return;
+    if (document.hidden) { pending.away = true; pending.t1 = Date.now(); return; }
+    if (pending.away) openSheet(Math.max(0, Math.round((Date.now() - pending.t1) / 30000) / 2));
+  });
+  function pick(id, v) { $(id).querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); }
+  const val = id => ($(id).querySelector("button.on") || {}).dataset?.v || "";
+  ["csWho", "csRes"].forEach(id => $(id).addEventListener("click", e => { const b = e.target.closest("button"); if (b) pick(id, b.dataset.v); }));
+  function openSheet(min) {
+    $("csName").textContent = pending.s.name + " · " + pending.s.group;
+    pick("csWho", pending.who); pick("csRes", min >= 0.5 ? "Gaplashildi" : "Javob bermadi");
+    $("csMin").value = min; $("csNote").value = ""; $("callSheet").hidden = false;
+  }
+  $("csCancel").onclick = () => { $("callSheet").hidden = true; pending = null; };
+  $("csSave").onclick = async () => {
+    const b = $("csSave"), p = pending; b.disabled = true; b.textContent = "Saqlanmoqda…";
+    try {
+      p.s.calls = await api("call", {c: {id: p.s.id, name: p.s.name, group: p.s.group, who: val("csWho"), phone: p.phone,
+        result: val("csRes"), min: +$("csMin").value || 0, note: $("csNote").value}});
+      $("callSheet").hidden = true; pending = null; drawAbs();
+    } catch (e) { alert("Xato: " + e.message); }
+    b.disabled = false; b.textContent = "Saqlash";
+  };
+
+  /* --- Hisobot --- */
+  let per = "day", rep = null, gAsc = true, gAll = false, sAll = false;
+  function range() {
+    const d = new Date(TODAY + "T12:00:00");
+    if (per === "week") { const m = new Date(d); m.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return [iso(m), TODAY]; }
+    if (per === "month") return [TODAY.slice(0, 8) + "01", TODAY];
+    if (per === "custom") return [$("repFrom").value || TODAY, $("repTo").value || TODAY];
+    return [TODAY, TODAY];
+  }
+  async function loadRep() {
+    const [from, to] = range();
+    $("repBody").innerHTML = '<div class="x-empty">Yuklanmoqda…</div>';
+    try { rep = await api("report", {q: {from, to, bino: $("repBino").value, group: $("repGrp").value.trim()}}); }
+    catch (e) { $("repBody").innerHTML = `<div class="x-empty">Xato: ${esc(e.message)}</div>`; return; }
+    if ($("repBino").options.length !== rep.binos.length + 1) {
+      const cur = $("repBino").value;
+      $("repBino").innerHTML = `<option value="">Hamma binolar</option>` + rep.binos.map(b => `<option${b === cur ? " selected" : ""}>${esc(b)}</option>`).join("");
+    }
+    drawRep();
+  }
+  function drawRep() {
+    const t = rep.tot, f = (a, b) => a === b ? a : a + " — " + b;
+    if (!t.lessons) { $("repBody").innerHTML = `<div class="x-empty">${f(rep.from, rep.to)} oralig'ida tekshirilgan dars yo'q</div>`; return; }
+    const gs = gAsc ? rep.groups : [...rep.groups].reverse(), gShow = gAll ? gs : gs.slice(0, 8);
+    const st = sAll ? rep.students : rep.students.slice(0, 15);
+    const cls = p => p < 80 ? "lo" : p < 90 ? "mid" : "";
+    $("repBody").innerHTML = `
+      <div class="x-kpi">
+        <div class="big"><small>Davomat · ${f(rep.from, rep.to)}</small><b>${t.pct}%</b></div>
+        <div><small>Kelmagan</small><b>${t.Y}</b></div><div><small>Sababli</small><b>${t.S}</b></div>
+        <div><small>Kech qolgan</small><b>${t.K}</b></div><div><small>Tekshirilgan darslar</small><b>${t.lessons}</b></div>
+      </div>
+      <div class="x-sec"><h3>Guruhlar (${rep.groups.length})</h3><div class="x-chips"><button data-gs="1" class="${gAsc ? "on" : ""}">Eng past</button><button data-gs="0" class="${gAsc ? "" : "on"}">Eng yuqori</button></div></div>
+      ${gShow.map(g => `<div class="x-g"><span>${esc(g.group)}<br><span class="x-sub">${g.Y} yo'q · ${g.K} kech · ${g.S} sababli</span></span><div class="x-bar"><i class="${cls(g.pct)}" style="width:${g.pct}%"></i></div><b>${g.pct}%</b></div>`).join("")}
+      ${gs.length > 8 ? `<button class="x-more" data-gall>${gAll ? "Kamroq" : "Hammasini ko'rsatish"}</button>` : ""}
+      <div class="x-sec"><h3>Kelmagan talabalar (${rep.students.length})</h3></div>
+      <div class="x-list">${st.map(s => `<div class="x-item"><div class="t"><span>${esc(s.name)}</span><span class="x-sub">${esc(s.group)}</span></div>
+        <div class="x-tags">${["Y", "K", "S"].filter(k => s[k]).map(k => `<span class="x-tag ${k}">${ST[k]} ×${s[k]}</span>`).join("")}${s.calls.length ? `<span class="x-tag ok">☎ ${s.calls.length} qo'ng'iroq</span>` : ""}</div></div>`).join("")}</div>
+      ${rep.students.length > 15 ? `<button class="x-more" data-sall>${sAll ? "Kamroq" : "Hammasini ko'rsatish"}</button>` : ""}`;
+  }
+  $("repBody").addEventListener("click", e => {
+    const b = e.target.closest("[data-gs],[data-gall],[data-sall]"); if (!b) return;
+    if (b.dataset.gs) gAsc = b.dataset.gs === "1"; if (b.hasAttribute("data-gall")) gAll = !gAll; if (b.hasAttribute("data-sall")) sAll = !sAll;
+    drawRep();
+  });
+  $("repPer").addEventListener("click", e => {
+    const b = e.target.closest("[data-per]"); if (!b) return;
+    per = b.dataset.per; $("repPer").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    $("repDates").hidden = per !== "custom";
+    if (per === "custom" && !$("repFrom").value) { $("repFrom").value = TODAY; $("repTo").value = TODAY; }
+    loadRep();
+  });
+  ["repFrom", "repTo", "repBino"].forEach(id => $(id).addEventListener("change", loadRep));
+  let gt; $("repGrp").addEventListener("input", () => { clearTimeout(gt); gt = setTimeout(loadRep, 500); });
+
+  // Excel ochadigan CSV: ";" ajratuvchi va BOM — o'zbek/rus Excel'da ustunlarga to'g'ri bo'linadi
+  $("repCsv").onclick = () => {
+    if (!rep) return;
+    const q = v => { v = String(v == null ? "" : v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    const t = rep.tot, L = [];
+    L.push(["Davomat hisoboti", rep.from + " — " + rep.to], ["Bino", $("repBino").value || "Hammasi"], ["Guruh", $("repGrp").value || "Hammasi"], []);
+    L.push(["Davomat %", t.pct], ["Kelmagan", t.Y], ["Sababli", t.S], ["Kech", t.K], ["Tekshirilgan darslar", t.lessons], []);
+    L.push(["Guruh", "Davomat %", "Kelmagan", "Kech", "Sababli", "Talaba-dars"]);
+    rep.groups.forEach(g => L.push([g.group, g.pct, g.Y, g.K, g.S, g.jami]));
+    L.push([], ["F.I.Sh", "Guruh", "Kelmagan", "Kech", "Sababli", "Oxirgi sana", "Qo'ng'iroqlar"]);
+    rep.students.forEach(s => L.push([s.name, s.group, s.Y, s.K, s.S, s.last, s.calls.map(c => `${c.date} ${c.time} ${c.who}: ${c.result}${c.min ? " " + c.min + " daq" : ""}`).join(" | ")]));
+    const blob = new Blob(["﻿" + L.map(r => r.map(q).join(";")).join("\r\n")], {type: "text/csv;charset=utf-8"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `davomat_${rep.from}_${rep.to}.csv`; a.click();
+  };
+};
 
 </script>
 </body>
